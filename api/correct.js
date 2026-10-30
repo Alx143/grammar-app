@@ -9,7 +9,7 @@ export default async function handler(req, res) {
     const prompt = `You are a grammar and spelling corrector. Reply ONLY with the corrected, natural-sounding text. Do not add any conversational filler, explanations, or quotes. Text to correct: ${req.body.text}`;
 
     try {
-        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`, {
+        const response = await fetch(`https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
