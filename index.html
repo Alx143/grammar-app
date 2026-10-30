@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>143 Grammar Corrector</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; max-width: 600px; margin: auto; }
+        textarea { width: 100%; height: 100px; margin-bottom: 10px; padding: 10px; }
+        button { padding: 10px 20px; cursor: pointer; background: #0070f3; color: white; border: none; border-radius: 5px; }
+        #output { margin-top: 20px; padding: 15px; background: #f0f0f0; border-radius: 5px; min-height: 50px; white-space: pre-wrap; }
+    </style>
+</head>
+<body>
+    <h2>143 Grammar Corrector</h2>
+    <textarea id="inputText" placeholder="Paste your draft here..."></textarea><br>
+    <button onclick="fixGrammar()">Fix Grammar</button>
+    <div id="output">Corrected text will appear here...</div>
+
+    <script>
+        async function fixGrammar() {
+            const text = document.getElementById('inputText').value;
+            if (!text) return;
+            
+            document.getElementById('output').innerText = 'Correcting...';
+            
+            const response = await fetch('/api/correct', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ text: text })
+            });
+            
+            const data = await response.json();
+            document.getElementById('output').innerText = data.result || 'Error fixing text.';
+        }
+    </script>
+</body>
+</html>
