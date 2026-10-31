@@ -1,44 +1,46 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>143 Grammar Corrector</title>
+    <title>143 Diplomatic Assistant</title>
     <style>
         body { font-family: sans-serif; padding: 20px; max-width: 600px; margin: auto; }
         textarea { width: 100%; height: 100px; margin-bottom: 10px; padding: 10px; }
-        .btn-group { display: flex; gap: 10px; margin-bottom: 20px; }
+        .btn-group { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
         button { padding: 10px 20px; cursor: pointer; border: none; border-radius: 5px; font-weight: bold; color: white; }
         #fixBtn { background: #0070f3; }
+        #replyBtn { background: #6f42c1; } 
         #copyBtn { background: #28a745; display: none; }
         #output { padding: 15px; background: #f0f0f0; border-radius: 5px; min-height: 50px; white-space: pre-wrap; }
     </style>
 </head>
 <body>
-    <h2>143 Grammar Corrector</h2>
-    <textarea id="inputText" placeholder="Paste your draft here..."></textarea><br>
+    <h2>143 Diplomatic Assistant</h2>
+    <textarea id="inputText" placeholder="Paste your draft to fix, OR a message to reply to..."></textarea><br>
     
     <div class="btn-group">
-        <button id="fixBtn" onclick="fixGrammar()">Fix Grammar</button>
+        <button id="fixBtn" onclick="processText('correct')">Fix Grammar</button>
+        <button id="replyBtn" onclick="processText('reply')">Help Me Reply</button>
         <button id="copyBtn" onclick="copyText()">Copy Output</button>
     </div>
 
-    <div id="output">Corrected text will appear here...</div>
+    <div id="output">Output will appear here...</div>
 
     <script>
-        async function fixGrammar() {
+        async function processText(actionType) {
             const text = document.getElementById('inputText').value;
             if (!text) return;
             
-            document.getElementById('output').innerText = 'Correcting...';
+            document.getElementById('output').innerText = actionType === 'reply' ? 'Drafting reply...' : 'Correcting...';
             document.getElementById('copyBtn').style.display = 'none';
             
             const response = await fetch('/api/correct', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ text: text })
+                body: JSON.stringify({ text: text, action: actionType })
             });
             
             const data = await response.json();
-            document.getElementById('output').innerText = data.result || 'Error fixing text.';
+            document.getElementById('output').innerText = data.result || 'Error processing text.';
             
             if (response.ok) {
                 document.getElementById('copyBtn').style.display = 'block';
