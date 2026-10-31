@@ -5,14 +5,22 @@
     <style>
         body { font-family: sans-serif; padding: 20px; max-width: 600px; margin: auto; }
         textarea { width: 100%; height: 100px; margin-bottom: 10px; padding: 10px; }
-        button { padding: 10px 20px; cursor: pointer; background: #0070f3; color: white; border: none; border-radius: 5px; }
-        #output { margin-top: 20px; padding: 15px; background: #f0f0f0; border-radius: 5px; min-height: 50px; white-space: pre-wrap; }
+        .btn-group { display: flex; gap: 10px; margin-bottom: 20px; }
+        button { padding: 10px 20px; cursor: pointer; border: none; border-radius: 5px; font-weight: bold; color: white; }
+        #fixBtn { background: #0070f3; }
+        #copyBtn { background: #28a745; display: none; }
+        #output { padding: 15px; background: #f0f0f0; border-radius: 5px; min-height: 50px; white-space: pre-wrap; }
     </style>
 </head>
 <body>
     <h2>143 Grammar Corrector</h2>
     <textarea id="inputText" placeholder="Paste your draft here..."></textarea><br>
-    <button onclick="fixGrammar()">Fix Grammar</button>
+    
+    <div class="btn-group">
+        <button id="fixBtn" onclick="fixGrammar()">Fix Grammar</button>
+        <button id="copyBtn" onclick="copyText()">Copy Output</button>
+    </div>
+
     <div id="output">Corrected text will appear here...</div>
 
     <script>
@@ -21,6 +29,7 @@
             if (!text) return;
             
             document.getElementById('output').innerText = 'Correcting...';
+            document.getElementById('copyBtn').style.display = 'none';
             
             const response = await fetch('/api/correct', {
                 method: 'POST',
@@ -30,6 +39,19 @@
             
             const data = await response.json();
             document.getElementById('output').innerText = data.result || 'Error fixing text.';
+            
+            if (response.ok) {
+                document.getElementById('copyBtn').style.display = 'block';
+            }
+        }
+
+        function copyText() {
+            const outputText = document.getElementById('output').innerText;
+            navigator.clipboard.writeText(outputText).then(() => {
+                const copyBtn = document.getElementById('copyBtn');
+                copyBtn.innerText = 'Copied!';
+                setTimeout(() => copyBtn.innerText = 'Copy Output', 2000);
+            });
         }
     </script>
 </body>
