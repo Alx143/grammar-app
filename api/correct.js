@@ -11,13 +11,13 @@ export default async function handler(req, res) {
     
     let prompt = "";
     if (action === 'reply') {
-        prompt = `You are a strategic diplomat, leader, and expert communicator. The user received the following message in a strategy game. Generate a sophisticated, articulate, and authoritative response to it. Reply ONLY with the drafted response. Do not add conversational filler or quotes. Message received: ${text}`;
+        prompt = `The user received the following message. Generate a clear, natural, and friendly response in everyday English. It should sound like a normal person having a regular conversation. Do not sound formal, diplomatic, or use gamer slang. Keep it straightforward and polite. Reply ONLY with the drafted response. Do not add conversational filler or quotes. Message received: ${text}`;
     } else {
-        prompt = `You are an expert editor and diplomat. Correct the grammar and spelling of the following text, and elevate the vocabulary to sound highly sophisticated, articulate, and authoritative. Reply ONLY with the improved text. Do not add any conversational filler, explanations, or quotes. Text to correct: ${text}`;
+        prompt = `Correct the grammar and spelling of the following text. Make it sound natural, clear, and conversational in everyday English, like a normal person speaking. Do NOT use overly formal vocabulary, diplomatic phrasing, or gamer slang. Reply ONLY with the improved text. Do not add conversational filler, explanations, or quotes. Text to correct: ${text}`;
     }
 
     try {
-        const response = await fetch(`https://generativelanguage.googleapis.com/v1/models/gemini-3.6-flash:generateContent?key=${apiKey}`, {
+        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
