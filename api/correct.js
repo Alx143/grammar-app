@@ -17,8 +17,8 @@ export default async function handler(req, res) {
     }
 
     try {
-        // Updated endpoint to use v1beta for gemini-1.5-flash
-        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
+        // Switched to the universally supported gemini-pro model on the stable v1 endpoint
+        const response = await fetch(`https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent?key=${apiKey}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
